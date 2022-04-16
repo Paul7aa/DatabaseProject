@@ -192,15 +192,28 @@ namespace DatabaseProjectBD
 
         private void btnSterge_Click(object sender, EventArgs e)
         {
-            IList<int>selectedRows = new List<int>();
+            IList<int> selectedRows = new List<int>();
 
             try
             {
+                if (this.dataGridView.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Selectati inregistrarile!", "Warning", MessageBoxButtons.OK);
+                    return;
+                }
                 foreach (DataGridViewRow item in this.dataGridView.SelectedRows)
                 {
+                    if (dataGridView.Rows[item.Index].Cells[0].Value == null)
+                    {
+                        MessageBox.Show("Selectati inregistrarile!", "Warning", MessageBoxButtons.OK);
+                        return;
+                    }
                     selectedRows.Add(Int16.Parse(dataGridView.Rows[item.Index].Cells[0].Value.ToString()));
                 }
-                foreach(var row in selectedRows)
+                DialogResult dr;
+                if ((dr = MessageBox.Show("Sunteti siguri ca doriti sa stergeti?", "Stergere", MessageBoxButtons.YesNo)) == DialogResult.No)
+                    return;
+                foreach (var row in selectedRows)
                 {
                     deleteRow(row.ToString());
 
